@@ -21,7 +21,9 @@ const year = new Date().getFullYear()
         <a :href="links.deploy" target="_blank" rel="noopener">{{ t.footer.deploy }}</a>
         <a :href="links.releasing" target="_blank" rel="noopener">{{ t.footer.releasing }}</a>
         <a :href="links.plugins" target="_blank" rel="noopener">{{ t.footer.plugins }}</a>
-        <a href="#faq">{{ t.nav[t.nav.length - 1]?.label }}</a>
+        <a href="/#faq">{{ t.nav[t.nav.length - 1]?.label }}</a>
+        <a href="/privacy">{{ t.footer.privacy }}</a>
+        <a href="/terms">{{ t.footer.terms }}</a>
       </nav>
       <span class="copy">© {{ year }} {{ t.footer.rights }}</span>
     </div>

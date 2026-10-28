@@ -163,6 +163,8 @@ export const en: Content = {
     windows: { title: 'Windows', text: 'Installer with updates delivered by your server.', action: 'Download for Windows' },
     android: { title: 'Android', text: 'APK for Android 8.0 and newer.', action: 'Download APK' },
     server: { title: 'Server', text: 'Docker image of the sync and update server.', action: 'How to deploy' },
+    version: 'Version {version}',
+    unavailable: 'Coming soon',
   },
   footer: {
     tagline: 'A personal space that stays yours.',
@@ -171,6 +173,112 @@ export const en: Content = {
     deploy: 'Deployment',
     releasing: 'Release guide',
     plugins: 'Plugin guide',
+    privacy: 'Privacy',
+    terms: 'Terms',
     rights: 'Akkraizen',
+  },
+  legal: {
+    updated: 'Effective October 28, 2026',
+    back: 'Back to home',
+    contact: 'Questions and requests: akkraizen@gmail.com',
+    privacy: {
+      title: 'Privacy Policy',
+      intro:
+        'Berill is a personal app for notes, habits, plans, and other records, developed by Akkraizen. This page explains what data the app handles, where it is stored, and how you control it.',
+      sections: [
+        {
+          title: 'Where your data lives',
+          paragraphs: [
+            'Everything you create in Berill is stored on your devices. The developer does not receive a copy of your records and has no access to them.',
+            'If you turn on sync, data is sent to the sync server you set in the settings, usually your own server. With end-to-end encryption enabled, the server stores records only in encrypted form.',
+          ],
+        },
+        {
+          title: 'What Berill does not do',
+          paragraphs: ['The app has no ads, analytics, or trackers. We do not sell your data or share it with third parties.'],
+        },
+        {
+          title: 'External services',
+          paragraphs: ['Berill contacts external services only for features you use:'],
+          list: [
+            'checking and downloading updates — updates.berill.space;',
+            'book search — Google Books;',
+            'food and barcode search — Open Food Facts;',
+            'movie, series, and anime search — Shikimori and Kinopoisk API;',
+            'exercise catalog — an open exercise database;',
+            'calendar — Google Calendar, if you connect a Google account.',
+          ],
+        },
+        {
+          title: 'Technical logs',
+          paragraphs: [
+            'Like any web server, the update server may record the IP address, request time, and app version. These logs are used only to operate and protect the service.',
+          ],
+        },
+        {
+          title: 'Google Calendar data',
+          paragraphs: [
+            'When you press "Sign in with Google", Berill asks for access to your calendar list and to the events in your calendars (the calendar.calendarlist.readonly and calendar.events scopes). This access is used only to show events in the Berill planner and to sync the changes you make in both directions.',
+            'The access token is kept in the secure storage of your device and never leaves it. Events are stored together with your other records and reach only your devices and your sync server. The developer does not receive this data. It is not used for advertising, is not sold, is not shared with third parties, and is not used to train artificial intelligence models.',
+            "Berill's use and transfer of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.",
+            'You can revoke access with the "Disconnect" button in the planner settings or at myaccount.google.com/permissions. Events already saved in Berill can be deleted in the app.',
+          ],
+        },
+        {
+          title: 'Deleting data',
+          paragraphs: [
+            'You can delete any record in the app, uninstall the app together with its data, and clear the data on your sync server. Since the developer does not store your data, there is nothing to delete on the developer side.',
+          ],
+        },
+        {
+          title: 'Children',
+          paragraphs: ['Berill is not intended for children under 13 and does not knowingly collect their data.'],
+        },
+        {
+          title: 'Changes',
+          paragraphs: ['If this policy changes, we will update this page and the date at the top.'],
+        },
+      ],
+    },
+    terms: {
+      title: 'Terms of Service',
+      intro: 'These terms govern the use of the Berill app and the berill.space website. By using them, you accept these terms.',
+      sections: [
+        {
+          title: 'The app',
+          paragraphs: ['Berill is provided free of charge. Its source code is published on GitHub. You may use the app for personal purposes.'],
+        },
+        {
+          title: 'Your data and your server',
+          paragraphs: [
+            'You are responsible for your records, backups, and sync server if you use one. Keep passwords and encryption keys safe: encrypted data cannot be recovered without them.',
+          ],
+        },
+        {
+          title: 'Third-party services',
+          paragraphs: [
+            "Some features use third-party services such as Google Calendar, Google Books, or Open Food Facts. Their use is governed by those services' terms. By connecting a Google account, you also agree to Google's terms.",
+          ],
+        },
+        {
+          title: 'Acceptable use',
+          paragraphs: ['Do not use Berill or the update server for unlawful activities and do not try to disrupt the service.'],
+        },
+        {
+          title: 'No warranty',
+          paragraphs: ['The app is provided "as is", without warranties of any kind. The developer does not guarantee uninterrupted or error-free operation.'],
+        },
+        {
+          title: 'Limitation of liability',
+          paragraphs: [
+            'To the extent permitted by law, the developer is not liable for data loss, lost profits, or any other damages related to the use of the app.',
+          ],
+        },
+        {
+          title: 'Changes',
+          paragraphs: ['These terms may change. The current version is always published on this page.'],
+        },
+      ],
+    },
   },
 }

@@ -23,13 +23,13 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
 <template>
   <header class="header" :class="{ scrolled, open }">
     <div class="container bar">
-      <a href="#top" class="brand" @click="open = false">
+      <a href="/#top" class="brand" @click="open = false">
         <BerillLogo :size="28" />
         <span>Berill</span>
       </a>
 
       <nav class="nav" :aria-label="t.header.menu">
-        <a v-for="item in t.nav" :key="item.id" :href="`#${item.id}`" @click="open = false">{{ item.label }}</a>
+        <a v-for="item in t.nav" :key="item.id" :href="`/#${item.id}`" @click="open = false">{{ item.label }}</a>
       </nav>
 
       <div class="actions">
@@ -40,7 +40,7 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
         <button class="icon-btn" :aria-label="t.header.theme" :title="t.header.theme" @click="toggleTheme">
           <AppIcon :name="theme === 'dark' ? 'sun' : 'moon'" :size="20" />
         </button>
-        <a class="btn btn-primary cta" href="#download">{{ t.header.download }}</a>
+        <a class="btn btn-primary cta" href="/#download">{{ t.header.download }}</a>
         <button class="icon-btn burger" :aria-label="t.header.menu" :aria-expanded="open" @click="open = !open">
           <AppIcon :name="open ? 'close' : 'menu'" :size="22" />
         </button>

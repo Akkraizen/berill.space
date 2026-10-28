@@ -76,6 +76,18 @@ export interface MockupText {
   phoneRest: string
 }
 
+export interface LegalSection {
+  title: string
+  paragraphs: string[]
+  list?: string[]
+}
+
+export interface LegalDoc {
+  title: string
+  intro: string
+  sections: LegalSection[]
+}
+
 export interface Content {
   meta: { title: string; description: string }
   nav: { id: string; label: string }[]
@@ -109,6 +121,19 @@ export interface Content {
     windows: { title: string; text: string; action: string }
     android: { title: string; text: string; action: string }
     server: { title: string; text: string; action: string }
+    version: string
+    unavailable: string
   }
-  footer: { tagline: string; source: string; releases: string; deploy: string; releasing: string; plugins: string; rights: string }
+  footer: {
+    tagline: string
+    source: string
+    releases: string
+    deploy: string
+    releasing: string
+    plugins: string
+    privacy: string
+    terms: string
+    rights: string
+  }
+  legal: { updated: string; back: string; contact: string; privacy: LegalDoc; terms: LegalDoc }
 }

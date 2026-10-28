@@ -1,7 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{ size?: number }>(), { size: 32 })
 
-// The app logo: same facets and colors as the Android launcher icon (ic_launcher_foreground.xml).
 const facets = [
   {
     fill: '#3BAC77',

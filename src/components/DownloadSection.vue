@@ -1,8 +1,41 @@
 <script setup lang="ts">
-import { links, t } from '../content'
+import { computed, onMounted, ref } from 'vue'
+import { downloadUrl, links, t, type DownloadPlatform } from '../content'
 import { vReveal } from '../reveal'
 import AppIcon from './AppIcon.vue'
 import BerillLogo from './BerillLogo.vue'
+
+interface LatestRelease {
+  version: string
+  windows?: string
+  android?: string
+}
+
+const release = ref<LatestRelease | null>(null)
+const loaded = ref(false)
+
+onMounted(async () => {
+  try {
+    const response = await fetch(`${links.updates}/api/release`, { cache: 'no-store' })
+    if (response.status === 204) {
+      loaded.value = true
+    } else if (response.ok) {
+      release.value = await response.json()
+      loaded.value = true
+    }
+  } catch {
+    loaded.value = false
+  }
+})
+
+const available = (platform: DownloadPlatform) => !loaded.value || Boolean(release.value?.[platform])
+
+const version = computed(() => (release.value ? t.value.download.version.replace('{version}', release.value.version) : null))
+
+const options = computed(() => [
+  { platform: 'windows' as const, icon: 'desktop' as const, text: t.value.download.windows, style: 'btn-primary', primary: true },
+  { platform: 'android' as const, icon: 'phone' as const, text: t.value.download.android, style: 'btn-tonal', primary: false },
+])
 </script>
 
 <template>
@@ -14,23 +47,22 @@ import BerillLogo from './BerillLogo.vue'
         <p>{{ t.download.lead }}</p>
       </div>
       <div class="grid">
-        <article v-reveal class="option primary">
-          <AppIcon name="desktop" :size="30" />
-          <h3>{{ t.download.windows.title }}</h3>
-          <p>{{ t.download.windows.text }}</p>
-          <a class="btn btn-primary" :href="links.releases" target="_blank" rel="noopener">
+        <article
+          v-for="(option, i) in options"
+          :key="option.platform"
+          v-reveal="i * 80"
+          class="option"
+          :class="{ primary: option.primary }"
+        >
+          <AppIcon :name="option.icon" :size="30" />
+          <h3>{{ option.text.title }}</h3>
+          <p>{{ option.text.text }}</p>
+          <span v-if="version && available(option.platform)" class="version">{{ version }}</span>
+          <a v-if="available(option.platform)" class="btn" :class="option.style" :href="downloadUrl(option.platform)">
             <AppIcon name="download" :size="20" />
-            {{ t.download.windows.action }}
+            {{ option.text.action }}
           </a>
-        </article>
-        <article v-reveal="80" class="option">
-          <AppIcon name="phone" :size="30" />
-          <h3>{{ t.download.android.title }}</h3>
-          <p>{{ t.download.android.text }}</p>
-          <a class="btn btn-tonal" :href="links.releases" target="_blank" rel="noopener">
-            <AppIcon name="download" :size="20" />
-            {{ t.download.android.action }}
-          </a>
+          <span v-else class="btn btn-outline disabled" aria-disabled="true">{{ t.download.unavailable }}</span>
         </article>
         <article v-reveal="160" class="option">
           <AppIcon name="server" :size="30" />
@@ -118,6 +150,23 @@ h3 {
 .option .btn {
   margin-top: 16px;
   justify-content: center;
+}
+
+.version {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.version + .btn {
+  margin-top: 8px;
+}
+
+.btn.disabled {
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
 }
 
 @media (max-width: 860px) {
