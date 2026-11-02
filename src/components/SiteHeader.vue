@@ -158,6 +158,21 @@ onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
   display: none;
 }
 
+@media (max-width: 1180px) {
+  .bar {
+    gap: 16px;
+  }
+
+  .nav {
+    margin-left: 0;
+    gap: 0;
+  }
+
+  .nav a {
+    padding: 8px 9px;
+  }
+}
+
 @media (max-width: 960px) {
   .nav {
     position: absolute;

@@ -9,7 +9,8 @@ export const links = {
   repo: 'https://github.com/Akkraizen/Berill',
   releases: 'https://github.com/Akkraizen/Berill/releases/latest',
   deploy: 'https://github.com/Akkraizen/Berill/blob/master/docs/DEPLOY.md',
-  releasing: 'https://github.com/Akkraizen/Berill/blob/master/docs/RELEASES.md',
+  changelog: 'https://github.com/Akkraizen/Berill/blob/master/CHANGELOG.md',
+  mcp: 'https://github.com/Akkraizen/Berill/blob/master/docs/MCP.md',
   plugins: 'https://github.com/Akkraizen/Berill/blob/master/docs/EXTERNAL_PLUGINS.md',
   updates: 'https://updates.berill.space',
 }
@@ -26,7 +27,7 @@ function currentPage(): Page {
 
 export const page: Page = currentPage()
 
-export type DownloadPlatform = 'windows' | 'android'
+export type DownloadPlatform = 'windows' | 'macos' | 'linux-deb' | 'linux-rpm' | 'android'
 
 export const downloadUrl = (platform: DownloadPlatform) => `${links.updates}/download/latest/${platform}`
 

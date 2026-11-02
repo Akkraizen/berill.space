@@ -11,6 +11,17 @@ export type IconName =
   | 'languages'
   | 'study'
   | 'projects'
+  | 'health'
+  | 'ai'
+  | 'search'
+  | 'widget'
+  | 'bell'
+  | 'calendar'
+  | 'layout'
+  | 'archive'
+  | 'link'
+  | 'laptop'
+  | 'terminal'
   | 'offline'
   | 'server'
   | 'lock'
@@ -43,6 +54,12 @@ export interface Feature {
   icon: IconName
   title: string
   text: string
+}
+
+export interface DownloadText {
+  title: string
+  text: string
+  action: string
 }
 
 export interface Step {
@@ -111,6 +128,16 @@ export interface Content {
     points: Feature[]
     devices: { pc: string; phone: string; server: string; encrypted: string }
   }
+  workspace: { title: string; lead: string; items: Feature[] }
+  assistants: {
+    title: string
+    lead: string
+    points: Feature[]
+    clients: string[]
+    clientsTitle: string
+    chat: { question: string; tools: string[]; answer: string }
+    docs: string
+  }
   plugins: { title: string; lead: string; points: Feature[]; docs: string }
   desktop: { title: string; lead: string; points: Feature[]; android: Feature; updates: Feature }
   stack: { title: string; lead: string; items: string[]; docs: string }
@@ -118,9 +145,11 @@ export interface Content {
   download: {
     title: string
     lead: string
-    windows: { title: string; text: string; action: string }
-    android: { title: string; text: string; action: string }
-    server: { title: string; text: string; action: string }
+    windows: DownloadText
+    macos: DownloadText
+    linux: DownloadText & { rpm: string }
+    android: DownloadText
+    server: DownloadText
     version: string
     unavailable: string
   }
@@ -129,8 +158,9 @@ export interface Content {
     source: string
     releases: string
     deploy: string
-    releasing: string
     plugins: string
+    mcp: string
+    changelog: string
     privacy: string
     terms: string
     rights: string

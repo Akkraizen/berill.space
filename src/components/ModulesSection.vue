@@ -4,6 +4,7 @@ import { vReveal } from '../reveal'
 import AppIcon from './AppIcon.vue'
 
 const tones = ['primary', 'tertiary', 'secondary'] as const
+const wide: Record<string, string> = { notes: 'w1', planner: 'w2', health: 'w3' }
 </script>
 
 <template>
@@ -19,6 +20,7 @@ const tones = ['primary', 'tertiary', 'secondary'] as const
           :key="item.icon"
           v-reveal="(i % 4) * 60"
           class="card module"
+          :class="wide[item.icon]"
           :data-tone="tones[i % 3]"
         >
           <span class="badge"><AppIcon :name="item.icon" :size="26" /></span>
@@ -34,7 +36,14 @@ const tones = ['primary', 'tertiary', 'secondary'] as const
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: row dense;
   gap: 16px;
+}
+
+.w1,
+.w2,
+.w3 {
+  grid-column: span 2;
 }
 
 .module {
@@ -85,6 +94,10 @@ p {
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .w3 {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 760px) {
@@ -96,11 +109,19 @@ p {
   .module {
     padding: 18px;
   }
+
+  .w2 {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 420px) {
   .grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .w1 {
+    grid-column: auto;
   }
 }
 </style>

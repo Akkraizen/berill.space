@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { downloadUrl, links, t, type DownloadPlatform } from '../content'
+import type { DownloadText, IconName } from '../content/types'
 import { vReveal } from '../reveal'
 import AppIcon from './AppIcon.vue'
 import BerillLogo from './BerillLogo.vue'
@@ -8,13 +9,36 @@ import BerillLogo from './BerillLogo.vue'
 interface LatestRelease {
   version: string
   windows?: string
+  macos?: string
+  linuxDeb?: string
+  linuxRpm?: string
   android?: string
+}
+
+type Os = 'windows' | 'macos' | 'linux' | 'android'
+
+const fields: Record<DownloadPlatform, keyof LatestRelease> = {
+  windows: 'windows',
+  macos: 'macos',
+  'linux-deb': 'linuxDeb',
+  'linux-rpm': 'linuxRpm',
+  android: 'android',
 }
 
 const release = ref<LatestRelease | null>(null)
 const loaded = ref(false)
+const os = ref<Os>('windows')
+
+function detectOs(): Os {
+  const agent = navigator.userAgent.toLowerCase()
+  if (agent.includes('android')) return 'android'
+  if (agent.includes('mac os') || agent.includes('macintosh')) return 'macos'
+  if (agent.includes('linux') || agent.includes('x11')) return 'linux'
+  return 'windows'
+}
 
 onMounted(async () => {
+  os.value = detectOs()
   try {
     const response = await fetch(`${links.updates}/api/release`, { cache: 'no-store' })
     if (response.status === 204) {
@@ -28,14 +52,33 @@ onMounted(async () => {
   }
 })
 
-const available = (platform: DownloadPlatform) => !loaded.value || Boolean(release.value?.[platform])
+const available = (platform: DownloadPlatform) => !loaded.value || Boolean(release.value?.[fields[platform]])
 
 const version = computed(() => (release.value ? t.value.download.version.replace('{version}', release.value.version) : null))
 
-const options = computed(() => [
-  { platform: 'windows' as const, icon: 'desktop' as const, text: t.value.download.windows, style: 'btn-primary', primary: true },
-  { platform: 'android' as const, icon: 'phone' as const, text: t.value.download.android, style: 'btn-tonal', primary: false },
+interface Option {
+  os: Os
+  icon: IconName
+  text: DownloadText
+  actions: { platform: DownloadPlatform; label: string }[]
+}
+
+const options = computed<Option[]>(() => [
+  { os: 'windows', icon: 'desktop', text: t.value.download.windows, actions: [{ platform: 'windows', label: t.value.download.windows.action }] },
+  { os: 'macos', icon: 'laptop', text: t.value.download.macos, actions: [{ platform: 'macos', label: t.value.download.macos.action }] },
+  {
+    os: 'linux',
+    icon: 'terminal',
+    text: t.value.download.linux,
+    actions: [
+      { platform: 'linux-deb', label: t.value.download.linux.action },
+      { platform: 'linux-rpm', label: t.value.download.linux.rpm },
+    ],
+  },
+  { os: 'android', icon: 'phone', text: t.value.download.android, actions: [{ platform: 'android', label: t.value.download.android.action }] },
 ])
+
+const anyAvailable = (option: Option) => option.actions.some((action) => available(action.platform))
 </script>
 
 <template>
@@ -49,31 +92,42 @@ const options = computed(() => [
       <div class="grid">
         <article
           v-for="(option, i) in options"
-          :key="option.platform"
-          v-reveal="i * 80"
+          :key="option.os"
+          v-reveal="i * 70"
           class="option"
-          :class="{ primary: option.primary }"
+          :class="{ primary: option.os === os }"
         >
           <AppIcon :name="option.icon" :size="30" />
           <h3>{{ option.text.title }}</h3>
           <p>{{ option.text.text }}</p>
-          <span v-if="version && available(option.platform)" class="version">{{ version }}</span>
-          <a v-if="available(option.platform)" class="btn" :class="option.style" :href="downloadUrl(option.platform)">
-            <AppIcon name="download" :size="20" />
-            {{ option.text.action }}
-          </a>
+          <span v-if="version && anyAvailable(option)" class="version">{{ version }}</span>
+          <div v-if="anyAvailable(option)" class="buttons">
+            <template v-for="(action, j) in option.actions" :key="action.platform">
+              <a
+                v-if="available(action.platform)"
+                class="btn"
+                :class="j > 0 ? 'btn-outline' : option.os === os ? 'btn-primary' : 'btn-tonal'"
+                :href="downloadUrl(action.platform)"
+              >
+                <AppIcon name="download" :size="20" />
+                {{ action.label }}
+              </a>
+            </template>
+          </div>
           <span v-else class="btn btn-outline disabled" aria-disabled="true">{{ t.download.unavailable }}</span>
         </article>
-        <article v-reveal="160" class="option">
-          <AppIcon name="server" :size="30" />
+      </div>
+      <article v-reveal="200" class="server">
+        <span class="badge"><AppIcon name="server" :size="28" /></span>
+        <div>
           <h3>{{ t.download.server.title }}</h3>
           <p>{{ t.download.server.text }}</p>
-          <a class="btn btn-outline" :href="links.deploy" target="_blank" rel="noopener">
-            {{ t.download.server.action }}
-            <AppIcon name="arrow" :size="20" />
-          </a>
-        </article>
-      </div>
+        </div>
+        <a class="btn btn-outline" :href="links.deploy" target="_blank" rel="noopener">
+          {{ t.download.server.action }}
+          <AppIcon name="arrow" :size="20" />
+        </a>
+      </article>
     </div>
   </section>
 </template>
@@ -108,7 +162,7 @@ const options = computed(() => [
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -147,9 +201,20 @@ h3 {
   flex: 1;
 }
 
-.option .btn {
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 16px;
+}
+
+.option .btn {
   justify-content: center;
+  padding: 0 18px;
+}
+
+.option > .btn {
+  margin-top: 16px;
 }
 
 .version {
@@ -159,8 +224,43 @@ h3 {
   font-weight: 600;
 }
 
-.version + .btn {
+.version + .buttons {
   margin-top: 8px;
+}
+
+.server {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+  padding: 24px 28px;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.server > div {
+  flex: 1;
+}
+
+.server h3 {
+  margin: 0;
+}
+
+.server p {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.server .badge {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  flex: none;
 }
 
 .btn.disabled {
@@ -169,9 +269,25 @@ h3 {
   pointer-events: none;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1080px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
   .grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .server {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .server .btn {
+    align-self: stretch;
+    justify-content: center;
   }
 }
 </style>

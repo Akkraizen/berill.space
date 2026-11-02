@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AssistantsSection from './components/AssistantsSection.vue'
 import DesktopSection from './components/DesktopSection.vue'
 import DownloadSection from './components/DownloadSection.vue'
 import FaqSection from './components/FaqSection.vue'
@@ -11,6 +12,7 @@ import SiteFooter from './components/SiteFooter.vue'
 import SiteHeader from './components/SiteHeader.vue'
 import StackSection from './components/StackSection.vue'
 import SyncSection from './components/SyncSection.vue'
+import WorkspaceSection from './components/WorkspaceSection.vue'
 import { page } from './content'
 </script>
 
@@ -21,6 +23,8 @@ import { page } from './content'
     <HeroSection />
     <PrinciplesSection />
     <ModulesSection />
+    <WorkspaceSection />
+    <AssistantsSection />
     <SyncSection />
     <PluginsSection />
     <DesktopSection />

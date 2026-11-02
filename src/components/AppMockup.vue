@@ -4,7 +4,7 @@ import type { IconName } from '../content/types'
 import AppIcon from './AppIcon.vue'
 import BerillLogo from './BerillLogo.vue'
 
-const navIcons: IconName[] = ['desktop', 'notes', 'habits', 'planner', 'workouts', 'nutrition', 'finance']
+const navIcons: IconName[] = ['desktop', 'notes', 'habits', 'planner', 'workouts', 'health', 'nutrition', 'finance']
 </script>
 
 <template>

@@ -1,7 +1,10 @@
 # berill.space
 
 The landing page of [Berill](https://github.com/Akkraizen/Berill), a local-first personal workspace
-for Windows and Android. Built with Vue 3, TypeScript, and Vite as a static site.
+for Windows, macOS, Linux, and Android. Built with Vue 3, TypeScript, and Vite as a static site.
+
+Texts for both languages live in `src/content/ru.ts` and `src/content/en.ts`; the download buttons
+read the latest version and available packages from `https://updates.berill.space/api/release`.
 
 ## Development
 
